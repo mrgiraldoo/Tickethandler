@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
-require('mongoose-type-email');
-mongoose.SchemaTypes.Email.defaults.message = 'Email address is invalid'
+
 var Schema = mongoose.Schema;
 
 var TechnicianSchema = new Schema(
@@ -9,14 +8,14 @@ var TechnicianSchema = new Schema(
         middle_name: {type: String, max: 150},
         family_name: {type: String, required: true, max: 150},
         second_family_name: {type: String, max: 150},
-        email: {type: mongoose.SchemaTypes.Email, required: true},
+        email: {type: String, required: true},
         phone_number: {type: String, required: true, max: 30},
     }    
 );
 
 //Virtual for technician's full name
 TechnicianSchema
-.virtual('name')
+.virtual('name') 
 .get(function (){
 
 // To avoid errors in cases where an technician does not have either a family name or first name

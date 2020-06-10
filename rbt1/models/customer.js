@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
-require('mongoose-type-email');
-mongoose.SchemaTypes.Email.defaults.message = 'Email address is invalid'
+
 var Schema = mongoose.Schema;
 
 
@@ -8,9 +7,8 @@ var CustomerSchema = new Schema (
     {
         first_name: {type: String, max: 150},
         family_name: {type: String, max: 150},
-        family_name: {type: String, max: 150},
         phone_number: {type: String, max: 30},
-        email: {type: mongoose.SchemaTypes.Email, required: true}
+        email: {type: String, required: true}
     });
 
 //Virtual for customer's full name
