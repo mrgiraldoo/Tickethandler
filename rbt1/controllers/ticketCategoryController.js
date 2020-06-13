@@ -1,5 +1,8 @@
+const validator = require('express-validator');
 var TicketCategory = require('../models/ticketCategory');
 var Ticket = require('../models/ticket');
+var async = require('async');
+
 
 // Display a lit of all ticket categories
 exports.ticketCategory_list = function(req, res) {
@@ -41,9 +44,55 @@ exports.ticketCategory_create_get = function(req, res){
 };
 
 //Handle ticketCategory creation on POST
-exports.ticketCategory_create_post = function(req, res){
-    res.send('NOT IMPLEMENTED: ticketCategory create POST');
-};
+exports.ticketCategory_create_post = [
+     //Validate that the name field is not empty
+    validator.body('name', 'Genre name required').trim().isLength({min: 1 }),
+
+    //Validate that the description field is not empty
+    validator.body('description', 'Description required').trim().isLength({min: 1 }),
+
+    //Sanitize (escape) the name and description fields.
+    validator.check('name').escape(),
+    validator.check('description').escape(),
+
+    //Process request after validation and sanitization
+    (req, res, next) => {
+        //Extract the validation results from a request.
+        const errors = validator.validationResult(req);
+
+        //Create a ticketCategory object with escaped and trimmed data.
+        var ticketCategory = new TicketCategory(
+            {name:req.body.name, description:req.body.description}
+        );
+
+        if(!errors.isEmpty()){
+            //There are errors, render the form with sanitized valuers/error messages.
+            res.render('category_form', {title: 'Create Ticket Category', ticketCategory: ticketCategory, errors: errors.array()});
+            return;
+        }else{
+            //Date from form is valid.
+            //Check if TicketCategory with same name already exists.
+            TicketCategory.findOne({'name': req.body.name})
+                .exec(function(err, found_ticketCategory){
+                    if(err){return next(err);}
+
+                    if(found_ticketCategory){
+                        //Ticket Category exists, redirect to its detail page.
+                        res.redirect(found_ticketCategory.url);
+                    }
+                    else{
+                        ticketCategory.save(function(err){
+                            if(err){return next(err); }
+                            //Ticket Category saved, redirect to genre detail page.
+                            res.redirect(ticketCategory.url);
+                        });
+                    }
+                });
+        }
+    }
+];
+
+
 
 //Display ticketCategory delete GET
 exports.ticketCategory_delete_get = function(req, res){
