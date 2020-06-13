@@ -1,0 +1,18 @@
+extends layout
+
+block content
+
+  h1 Ticket Category: #{ticketCategory.name}
+  
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Tickets
+    
+    dl
+      each ticket in ticketCategory_tickets
+        dt 
+          a(href=ticket.url) #{ticket._id}
+        dd #{ticket.description}
+
+      else
+        p This ticket Category has no tickets

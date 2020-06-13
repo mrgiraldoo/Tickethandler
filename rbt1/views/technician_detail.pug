@@ -1,0 +1,21 @@
+extends layout
+
+block content
+
+  h1 Technician: #{technician.name}
+  p #[strong E-mail] - #{technician.email}
+  p #[strong Phone Number] - #{technician.phone_number}
+
+  
+  div(style='margin-left:20px;margin-top:20px')
+
+    h4 Tickets
+    
+    dl
+      each ticket in technician_tickets
+        dt 
+          a(href=ticket.url) #{ticket._id}
+        dd #{ticket.opening_description}
+
+      else
+        p This technician has not attended any ticket.

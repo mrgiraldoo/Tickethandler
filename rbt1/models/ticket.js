@@ -21,6 +21,25 @@ var TicketSchema = new Schema(
     }
 );
 
+//virtual for customer name
+TicketSchema
+.virtual('customer_name') 
+.get(function (){
+
+// To avoid errors in cases where a customer does not have either a family name or first name
+// We want to make sure we handle the exception by returning an empty string for that case
+    var fullname = '';
+    if (this.customer_first_name && this.customer_family_name) {
+        fullname = this.customer_family_name + ', ' + this.customer_first_name
+    }
+    if (!this.customer_first_name || !this.customer_family_name) {
+        fullname = '';
+    }
+    
+    return fullname; 
+});
+
+
 //Virtual for ticket's url.
 TicketSchema
 .virtual('url')

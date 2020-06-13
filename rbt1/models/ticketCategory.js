@@ -4,7 +4,8 @@ var Schema = mongoose.Schema;
 
 var TicketCategorySchema = new Schema(
     {
-        name: {type: String, required: true, min: 3, max: 100}
+        name: {type: String, required: true, min: 3, max: 100},
+        description: {type: String, required: true, min: 110, max: 500}
     }
 );
 

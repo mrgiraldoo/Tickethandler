@@ -1,18 +1,43 @@
 var Technician = require('../models/technician');
+var Ticket = require('../models/ticket');
 
 //Display a list of all technicians
 exports.technician_list = function(req, res){
-    res.send('NOT IMPLEMENTED: Technician list');
+    Technician.find({}, 'first_name family_name email phone_number')
+        .exec(function(err, list_technicians){
+            if(err){return next(err);}
+
+            //Successful, so render
+            res.render('technician_list', {title: 'Technicians List', technician_list: list_technicians});
+        })
 };
 
 //Display detail page for a specific Technician.
 exports.technician_detail = function(req, res){
-    res.send('NOT IMPLEMENTED: technician detail: ' + req.params.id);
+    async.parallel({
+        technician: function(callback){
+            Technician.findById(req.params.id)
+                .exec(callback)
+        },
+        technician_tickets: function(callback){
+            Ticket.find({'technician': req.params.id},'_id opening_description')
+                .exec(callback)
+        },
+    }, function(err, results){
+        if(err){return next(err);} //Error in API usage.
+        if(results.technician == null){ //No results
+            var err = new Error('Technician not found');
+            err.status = 404;
+            return next(err);
+        }
+        //Succesful, so render.
+        res.render('technician_detail', {title: 'Technician Detail', technician:results.technician, technician_tickets:results.technician_tickets});
+    });
 };
 
 //Display technician create form GET.
 exports.technician_create_get = function(req, res) {
-    res.send('NOT IMPLEMENTED:Technician create GET');
+    res.render('technician_form', {title: 'Create Technician'});
 };
 
 // Handle technician create on POST.

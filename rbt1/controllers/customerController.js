@@ -2,7 +2,7 @@ var Customer = require('../models/customer');
 
 //Display a list of all customers
 exports.customer_list = function(req, res){
-    res.send('NOT IMPLEMENTED: customer list');
+    Customer.find({}, 'first_name family_name email phone_number')
 };
 
 //Display detail page for a specific customer.

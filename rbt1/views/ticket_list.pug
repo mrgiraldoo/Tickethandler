@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1= title
+  
+  ul
+    - ticket_list.sort(function(a, b) {let textA = a._id; let textB = b._id; return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    each ticket in ticket_list
+      li 
+        a(href=ticket.url) #{ticket._id} 
+        |  #{ticket.category.name}
+        |  #{ticket.description}
+        |  Customer: #{ticket.customer_email}
+        |  Technician: #{ticket.technician.name}
+        
+
+    else
+      li There are no tickets.

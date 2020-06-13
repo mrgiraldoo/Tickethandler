@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+  
+  ul
+    - technician_list.sort(function(a, b) {let textA = a.name; let textB = b.name; return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+    each technician in technician_list
+      li 
+        a(href=technician.url) #{technician.name} 
+        |  #{technician.email}
+        |  #{technician.phone_number}
+
+        
+
+    else
+      li There are no technicians yet.
