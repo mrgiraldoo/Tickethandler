@@ -5,9 +5,7 @@ var Schema = mongoose.Schema;
 var TechnicianSchema = new Schema(
     {
         first_name: {type: String, required: true, max: 150},
-        middle_name: {type: String, max: 150},
         family_name: {type: String, required: true, max: 150},
-        second_family_name: {type: String, max: 150},
         email: {type: String, required: true},
         phone_number: {type: String, required: true, max: 30},
     }    

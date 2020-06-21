@@ -8,15 +8,15 @@ var TicketSchema = new Schema(
     {
         opening_description: {type: String, required: true, max: 400},
         category: {type: Schema.Types.ObjectId, ref: 'TicketCategory', required: true},
-        customer_first_name: {type: String, max: 150},
-        customer_family_name: {type: String, max: 150},
+        customer_first_name: {type: String, max: 150, default: 'no_name'},
+        customer_family_name: {type: String, max: 150, default: 'no_name'},
         customer_email: {type: String, required: true},
-        customer_phone_number: {type: String, max: 30},
+        customer_phone_number: {type: String, max: 30, default: 'no phone'},
         technician: {type: Schema.Types.ObjectId, ref: 'Technician'},
-        date_of_creation: {type: Date},
-        date_of_appointment: {type: Date},
-        date_of_closure: {type:Date},
-        closure_description: {type: String, required: true, max: 400, default: 'Case open'},
+        date_of_creation: {type: Date, default: Date.now},
+        date_of_appointment: {type: Date, default: Date.now},
+        date_of_closure: {type:Date, default: Date.now},
+        closure_description: {type: String, required: true, max: 400, default: 'Case is open'},
         status: {type: String, required: true, enum: ['Open', 'Appointment', 'In_Progress', 'Closed_Success', 'Closed_Fail'], default: 'Open'}
     }
 );
@@ -45,7 +45,7 @@ TicketSchema
 .virtual('url')
 .get(function(){
     return '/services/ticket/' + this._id
-})
+});
 
 module.exports = mongoose.model('Ticket', TicketSchema);
 

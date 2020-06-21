@@ -17,7 +17,7 @@ router.get('/', function(req, res) {
 router.get('/ticket/create', ticket_controller.ticket_create_get);
 
 // POST request for creating a ticket.
-router.post('/ticktet/create', ticket_controller.ticket_create_post);
+router.post('/ticket/create', ticket_controller.ticket_create_post);
 
 //GET tickets list
 router.get('/tickets', ticket_controller.ticket_list);
@@ -29,7 +29,7 @@ router.get('/ticket/:id/update', ticket_controller.ticket_update_get);
 router.post('/ticket/:id/update', ticket_controller.ticket_update_post);
 
 //GET request for a ticket's details.
-router.get('/ticket/:id/details', ticket_controller.ticket_detail);
+router.get('/ticket/:id', ticket_controller.ticket_detail);
 
 
 ///TICKET CATEGORIES ROUTES ///

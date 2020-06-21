@@ -1,0 +1,53 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='opening_description') Issue Description:
+      input#opening_description.form-control(type='text', placeholder='Opening description of ticket' name='opening_description' required='true' value=(undefined===ticket ? '' : ticket.opening_description) )
+
+    div.form-group
+      label(for='category') Ticket Category:
+      select#category.form-control(type='select', placeholder='Select category' name='category' required='true' )
+          - ticketCategories.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+          for category in ticketCategories
+            if ticket
+                option(value=category._id selected=(category._id.toString()==ticket.category ? 'selected' : false) ) #{category.name}
+            else
+                option(value=category._id) #{category.name}
+
+
+    div.form-group
+      label(for='customer_first_name') Customer's First Name:
+      input#customer_first_name.form-control(type='text', placeholder='customer first name' name='customer_first_name' required='true' value=(undefined===ticket ? '' : ticket.customer_first_name) )
+    
+    div.form-group
+      label(for='customer_family_name') Customer's Family Name:
+      input#customer_family_name.form-control(type='text', placeholder='customer family name' name='customer_family_name' required='true' value=(undefined===ticket ? '' : ticket.customer_family_name) )
+    
+    div.form-group
+      label(for='customer_email') Customer's Email:
+      input#customer_email.form-control(type='text', placeholder='customer email' name='customer_email' required='true' value=(undefined===ticket ? '' : ticket.customer_email) )
+
+    div.form-group
+      label(for='customer_phone_number') Customer's Phone Number:
+      input#customer_phone_number.form-control(type='text', placeholder='customer phone number' name='customer_phone_number' required='true' value=(undefined===ticket ? '' : ticket.customer_phone_number) )
+
+    div.form-group
+      label(for='technician') Technician:
+      select#technician.form-control(type='select', placeholder='Select technician' name='technician' required='true' )
+          - technicians.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+          for technician in technicians
+            if ticket
+                option(value=technician._id selected=(technician._id.toString()==ticket.technician ? 'selected' : false) ) #{technician.name}
+            else
+                option(value=technician._id) #{technician.name}
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors 
+    ul
+      for error in errors
+        li!= error.msg

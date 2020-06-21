@@ -1,5 +1,8 @@
+const validator = require('express-validator');
 var Technician = require('../models/technician');
 var Ticket = require('../models/ticket');
+const { validationResult } = require('express-validator');
+var async = require('async');
 
 //Display a list of all technicians
 exports.technician_list = function(req, res){
@@ -41,9 +44,52 @@ exports.technician_create_get = function(req, res) {
 };
 
 // Handle technician create on POST.
-exports.technician_create_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Technhician create POST');
-};
+exports.technician_create_post = [
+
+    //Validate fields
+    validator.body('first_name').isLength({min:1}).trim().withMessage('First name must be specified.')
+        .isAlphanumeric().withMessage('First name has non-alphanumeric characters'),
+    validator.body('family_name').isLength({min:1}).trim().withMessage('Family name must be specified.')
+        .isAlphanumeric().withMessage('Family name has non-alphanumeric characters'),
+    validator.body('email').isLength({min:1}).trim().withMessage('The email is required'),
+    validator.body('phone_number').isLength({min:1}).trim().withMessage('The phone number is required'),
+
+    // Sanitize fields
+    validator.sanitizeBody('first_name').escape(),
+    validator.sanitizeBody('family_name').escape(),
+    validator.sanitizeBody('email').escape(),
+    validator.sanitizeBody('phone_number').escape(),
+
+    // Process request after validation and sanitization
+    (req,res,next) => {
+
+        //Extracts the validation errors from a request.
+        const errors = validationResult(req);
+
+        if(!errors.isEmpty){
+            //There are errors. Render form again with sanitized values / errors messages.
+            res.render('technician_form', {title: 'Create Technician', technician: req.body, errors: errors.array()});
+        }
+        else{
+            // Data from form is valid.
+
+            // Create a technician object with escaped and trimmed data.
+            var technician = new Technician(
+                {
+                    first_name: req.body.first_name,
+                    family_name: req.body.family_name,
+                    email: req.body.email,
+                    phone_number: req.body.phone_number
+                }
+            );
+            technician.save(function(err){
+                if(err){return next(err);}
+                //Succesfu - redirect to new autor record.
+                res.redirect(technician.url);
+            });
+        }
+    }
+];
 
 //Display Technician delete on GET.
 exports.technician_delete_get = function(req, res) {

@@ -3,10 +3,12 @@ extends layout
 block content
 
   h1 Ticket Category: #{ticketCategory.name}
+  p #[strong Description:] #{ticketCategory.description}
   
   div(style='margin-left:20px;margin-top:20px')
 
     h4 Tickets
+
     
     dl
       each ticket in ticketCategory_tickets

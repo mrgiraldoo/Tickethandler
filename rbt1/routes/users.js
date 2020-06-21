@@ -31,7 +31,7 @@ router.get('/customer/:id/update', customer_controller.customer_update_get);
 router.post('/customer/:id/update', customer_controller.customer_update_post);
 
 // GET request to see a customer details //
-router.get('/customer/:id/details', customer_controller.customer_detail);
+router.get('/customer/:id', customer_controller.customer_detail);
 
 
 /// TECHNICIAN ROUTES ///
@@ -58,6 +58,6 @@ router.get('/technician/:id/update', technician_controller.technician_update_get
 router.post('/technician/:id/update', technician_controller.technician_update_post);
 
 // GET request to see a technician details //
-router.get('/technician/:id/details', technician_controller.technician_detail);
+router.get('/technician/:id', technician_controller.technician_detail);
 
 module.exports = router;
