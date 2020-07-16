@@ -35,15 +35,7 @@ block content
       label(for='customer_phone_number') Customer's Phone Number:
       input#customer_phone_number.form-control(type='text', placeholder='customer phone number' name='customer_phone_number' required='true' value=(undefined===ticket ? '' : ticket.customer_phone_number) )
 
-    div.form-group
-      label(for='technician') Technician:
-      select#technician.form-control(type='select', placeholder='Select technician' name='technician' required='true' )
-          - technicians.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
-          for technician in technicians
-            if ticket
-                option(value=technician._id selected=(technician._id.toString()==ticket.technician ? 'selected' : false) ) #{technician.name}
-            else
-                option(value=technician._id) #{technician.name}
+
 
     button.btn.btn-primary(type='submit') Submit
 
@@ -51,3 +43,4 @@ block content
     ul
       for error in errors
         li!= error.msg
+

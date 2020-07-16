@@ -54,7 +54,7 @@ exports.ticket_create_post = [
                 customer_family_name: req.body.customer_family_name,
                 customer_email: req.body.customer_email,
                 customer_phone_number: req.body.customer_phone_number,
-                technician: req.body.technician,
+
             }
         );
 
@@ -63,9 +63,7 @@ exports.ticket_create_post = [
 
             //get all technicians and ticket categories for form.
             async.parallel({
-                technicians: function(callback){
-                    Technician.find(callback);
-                },
+
                 ticketCategories: function(callback){
                     TicketCategory.find(callback);
                 },
@@ -117,7 +115,8 @@ exports.ticket_detail = function(req, res, next){
                 var err = new Error('Ticket not found');
                 err.status = 404;
                 return next(err);
-            }
+            };
+
                 //Successful, so render.
                 res.render('ticket_detail', {title: ticket._id, ticket: ticket});
             });

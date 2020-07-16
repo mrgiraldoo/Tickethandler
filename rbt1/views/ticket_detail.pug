@@ -2,7 +2,9 @@ extends layout
 
 block content
   h1 Ticket Number: #{ticket._id}
-  p #[strong Category:]  #{ticket.category}
+  p #[strong Category: ]
+    strong
+      a(href=ticket.category.url) #{ticket.category.name}
   p #[strong Status:]  #{ticket.status}
   p #[strong Date of Creation:]  #{ticket.date_of_creation}
   p #[strong Date of Appointment:]  #{ticket.date_of_appointment}
@@ -10,9 +12,14 @@ block content
   p #[strong Customer Email:]  #{ticket.customer_email}
   p #[strong Customer Phone:]  #{ticket.customer_phone_number}
   p #[strong Description:] #{ticket.opening_description}
-  p #[strong Technician:] #{ticket.technician.name}
-  p #[strong Technician email:] #{ticket.technician.email}
-  p #[strong Technician phone:] #{ticket.technician.phone_number}
+  if ticket.technician
+    p #[strong Technician:] #{ticket.technician.name}
+    p #[strong Technician email:] #{ticket.technician.email}
+    p #[strong Technician phone:] #{ticket.technician.phone_number}
+  else
+    p #[strong Technician:] Not Assigned
+    p #[strong Technician email:] Not assigned
+    p #[strong Technician phone:] Not assigned
   p #[strong Date of Closure:]  #{ticket.date_of_closure}
   p #[strong Closure Description:]  #{ticket.closure_description}
 

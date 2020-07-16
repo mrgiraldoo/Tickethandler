@@ -93,12 +93,48 @@ exports.technician_create_post = [
 
 //Display Technician delete on GET.
 exports.technician_delete_get = function(req, res) {
-    res.send('NOT IMPLEMENTED:Technician delete GET');
+    async.parallel({
+        technician: function(callback){
+            Technician.findById(req.params.id).exec(callback)
+        },
+        technicians_tickets: function(callback){
+            Ticket.find({'technician':req.params.id}).exec(callback)
+        } 
+    }, function(err, results){
+        if(err){return next(err);}
+        if(results.technician == null){ // No results
+            res.redirect ('/users/technicians');
+        }
+        //Successful, so render.
+        res.render('technician_delete', {title: 'Delete technician', technician: results.technician, technician_tickets: results.technicians_tickets});
+    })
 };
 
 //Handle Technician delete on POST.
-exports.technician_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Technician delete POST');
+exports.technician_delete_post = function(req, res, next) {
+    async.parallel({
+        technician: function(callback){
+            Technician.findById(req.body.technicianid).exec(callback)
+        },
+        technicians_tickets: function(callback){
+            Ticket.find({'technician': req.body.technicianid}).exec(callback)
+        },
+    }, function(err, results){
+        if (err){return next(err);}
+        //success
+        if(results.technicians_tickets.length>0){
+            //Technician has tickets. Render in same way as for GET Route
+            res.render('technician_delete', {title: 'Delete technician', technician: results.technician, technician_tickets: results.technicians_tickets});
+            return;
+        }else{
+            //Technician has no tickets. Delete object and redirect to the list of Technicians
+            Technician.findByIdAndRemove(req.body.technicianid, function deleteTechnician(err){
+                if(err){return next(err);}
+                //Success - go to techcnicians list
+                res.redirect('/users/technicians')
+            })
+        }
+    });
 };
 
 // Display Technician update form on GET.

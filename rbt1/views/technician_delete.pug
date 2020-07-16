@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 #{title}: #{technician.name}
+
+  
+  if technician_tickets.length
+  
+    p #[strong Delete the following tickets before attempting to delete this technician.]
+  
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Tickets
+    
+      dl
+      each ticket in technician_tickets
+        dt 
+          a(href=ticket.url) #{ticket._id}
+        dd #{ticket.opening_description}
+
+  else
+    p Do you really want to delete this technician?
+    
+    form(method='POST' action='')
+      div.form-group
+        input#technicianid.form-control(type='hidden',name='technicianid', required='true', value=technician._id )
+
+      button.btn.btn-primary(type='submit') Delete
